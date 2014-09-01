@@ -97,6 +97,11 @@ def edit_post(url_id):
         redirect('/')
     posts = ndb.Key(urlsafe=url_id)
     post = Posts.query(ancestor=posts).fetch()
+    photos = {}
+    i = 1
+    for photo in post[0].images:
+        photos["%s" % i] = photo
+        i += 1
     output = template('add.html', tags_list = tags_list, title = post[0].title, content = post[0].content, selection = post[0].tags, action="edit", photos=photos, url_id=url_id )
     return output
     
