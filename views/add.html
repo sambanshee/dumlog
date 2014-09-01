@@ -1,21 +1,39 @@
 ﻿
 % include('header.html')
+% setdefault('content', '')
+% setdefault('title', '')
+% setdefault('selection', '')
+% setdefault('action', 'add')
+% setdefault('url_id', '')
+% setdefault('photos', {'1':'', '2':'', '3':'', '4':'', '5':'', '6':'', '7':'', '8':'', '9':''},)
+
 <div class="container-fluid">
 
-    <form action="/add" method="post" role="form" class="form">
+    <form action="/{{action}}" method="post" role="form" class="form">
       <div class="form-group col-xs-8">
       <label for="title">Заголовок</label>
-      <input type="text" class="form-control" name="title" id="title" placeholder="Гроб гроб кладбище!" rows="1"></textarea>
+      <input type="text" class="form-control" name="title" id="title" placeholder="Гроб гроб кладбище!" value="{{title}}"></input>
 	  <label for="content">Пост</label>
-	  <textarea class="form-control input-lg" name="content" id="content" placeholder="Бла-бла-бла" rows="16"></textarea>
+	  <textarea class="form-control input-lg" name="content" id="content" placeholder="Бла-бла-бла" rows="16" >{{content}}</textarea>
       </div>
       <div class="form-group col-xs-4">
+      % for photo in range(1,9):
+      <input type="text" class="form-control" name="photo_{{photo}}" id="photo_{{photo}}" placeholder="http://.." value="{{photos["%s" % photo]}}"></input>
+      % end
 	  <label for="tags">Теги</label>
 	  <select multiple class="form-control" name="tags" id="tags">
       % for tag in tags_list:
-	    <option>{{tag}}</option>
+	    <option value={{tag}}
+        % if tag in selection:
+          selected
+        % end
+        >
+        {{tag}}</option>
       % end
 	  </select>
+      % if url_id:
+        <input type="hidden" name="url_id" value="{{url_id}}">
+      % end
       </div>
       <button type="submit" class="btn btn-default">Пост!</button>
     </form>
