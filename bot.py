@@ -5,16 +5,15 @@ from bottle import *
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from markdown2 import markdown
-import re
- 
+
 app = Bottle()
 
-tags_list = [u"Чушь", u"Креатив", u"Косплей", u"Фоточке"]
+tags_list = [u"Чушь", u"Креатив", u"Косплей", u"Фоточке", ]
 
 database_key = ndb.Key('Posts', 'submitted_posts')
 
 class Posts(ndb.Model):
-    content = ndb.TextProperty(indexed=True, required=True)
+    content = ndb.TextProperty(indexed=False, required=True)
     date = ndb.DateTimeProperty(auto_now_add=True)
     title = ndb.StringProperty(indexed=True, required=True)
     #tags = ndb.StringProperty(required=True, repeated=True, choices=set(tags_list))
@@ -28,6 +27,13 @@ def main_page():
     output = template('posts.html', posts=posts, tags_list = tags_list)
     return output
 
+@app.route('/who')
+def main_page():  
+    posts_query = Posts.query(Posts.title=="Кто здесь?").order(-Posts.date) 
+    posts = posts_query.fetch()   
+    output = template('posts.html', posts=posts, tags_list = tags_list)
+    return output
+    
 @app.route('/tags/<tag>')
 def main_page(tag):
    
@@ -36,19 +42,8 @@ def main_page(tag):
     if not posts:
         redirect('/')
     output = template('posts.html', posts=posts, tags_list = tags_list)
-    return output
-    
-@app.route('/tags/<keyword>')
-def main_page(keyword):
+    return output   
    
-    posts_query = Posts.query(Posts.tags==tag.decode('utf-8')).order(-Posts.date) 
-    posts = posts_query.fetch() 
-    if not posts:
-        redirect('/')
-    output = template('posts.html', posts=posts, tags_list = tags_list)
-    return output
-
-    
 @app.route('/posts/<url_id>')
 def single_post(url_id):
     posts = ndb.Key(urlsafe=url_id)

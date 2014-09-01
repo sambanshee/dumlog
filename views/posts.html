@@ -26,24 +26,25 @@
     </table>
     % if post.images:
     
-
+    <div class="row">
       % for photo in post.images:
         % if photo:
           <div class="col-xs-3">
-          <a href="{{photo}}" target="_blank">
-          <img src="{{photo}}" class="img-responsive img-thumbnail" />
+          <a href="{{photo}}" class="thumbnail" target="_blank">
+          <img src="{{photo}}" />
           </a>
           </div>
     
         % end
       % end
-    
+    </div>
     
     
     % end
     </div>
 
     <div class="panel-footer">
+    
     % for tag in post.tags:
       <span class="label label-primary">{{tag}}</span>
       

@@ -17,6 +17,12 @@ indexes:
     direction: desc
 
 - kind: Posts
+  properties:
+  - name: title
+  - name: date
+    direction: desc
+
+- kind: Posts
   ancestor: yes
   properties:
   - name: date
